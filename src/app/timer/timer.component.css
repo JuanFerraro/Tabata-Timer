@@ -2,3 +2,63 @@
 *{
   font-family: 'Familjen Grotesk', sans-serif;
 }
+
+.container {
+  margin: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.timer-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.timer {
+  margin: 0;
+  padding: 0;
+  font-size: 120px;
+}
+
+.info, .buttons {
+  display: flex;
+  column-gap: 24px;
+  justify-content: space-around;
+  margin-bottom: 18px;
+}
+
+h2 {
+  margin: 0;
+  font-size: xx-large;
+}
+
+
+.start-button {
+  background-color: #48ea27;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 12px;
+  font-size: x-large;
+  cursor: pointer;
+}
+
+.stop-button {
+  background-color: #c1c1c1;
+  color: black;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 12px;
+  font-size: x-large;
+  cursor: pointer;
+}
+
+.stop-button:hover {
+  background-color: #0e0e0e;
+  color: #e8e8e8;
+}
+
+.start-button:hover {
+  background-color: #178f0a;
+}
