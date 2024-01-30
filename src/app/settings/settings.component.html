@@ -1,0 +1,52 @@
+<form [formGroup]="settingsForm" (ngSubmit)="isFormWorking()" >
+  <h1>Settings</h1>
+
+  <div class="formGroup">
+    <label for="warmupInterval">
+      Warmup Interval:
+    </label>
+    <input type="number" id="warmupInterval"  formControlName="warmupIntervalMin" class="time-input" placeholder="Min" max="90" min="0">
+    <input type="number" id="warmupIntervalSec" formControlName="warmupIntervalSec" class="time-input" placeholder="Sec" max="59" min="0">
+  </div>
+
+  <div class="formGroup">
+    <label for="exerciseInterval">
+      Exercise Interval:
+    </label>
+    <input type="number" id="exerciseInterval" formControlName="exerciseIntervalMin" class="time-input" placeholder="Min" max="90" min="0">
+    <input type="number" id="exerciseIntervalSec" formControlName="exerciseIntervalSec" class="time-input" placeholder="Sec" max="59" min="0">
+  </div>
+
+  <div class="formGroup">
+    <label for="restInterval">
+      Rest Interval:
+    </label>
+    <input type="number" id="restInterval" formControlName="restIntervalMin" class="time-input" placeholder="Min" max="90" min="0">
+    <input type="number" id="restIntervalSec" formControlName="restIntervalSec" class="time-input" placeholder="Sec" max="59" min="0">
+  </div>
+
+  <div class="formGroup">
+    <label for="numberOfSets">
+      Number of Sets:
+    </label>
+    <input type="number" id="numberOfSets" formControlName="numberOfSets" class="time-input" placeholder="6" max="30" min="1">
+  </div>
+
+  <div class="formGroup">
+    <label for="numberOfCycles">
+      Number of Cycles:
+    </label>
+    <input type="number" id="numberOfCycles" formControlName="numberOfCycles" class="time-input" placeholder="3" max="10" min="1">
+  </div>
+
+  <div class="formGroup">
+    <label for="cooldownInterval">
+      Cooldown Interval:
+    </label>
+    <input type="number" id="cooldownInterval" formControlName="cooldownIntervalMin" class="time-input" placeholder="Min" max="90" min="0">
+    <input type="number" id="cooldownIntervalSec" formControlName="cooldownIntervalSec" class="time-input" placeholder="Sec" max="59" min="0">
+  </div>
+
+  <button type="submit">Enviar</button>
+</form>
+

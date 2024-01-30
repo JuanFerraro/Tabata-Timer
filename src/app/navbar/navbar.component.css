@@ -28,3 +28,8 @@
   color: black;
   cursor: pointer;
 }
+
+a {
+  font-weight: bolder;
+  font-size: larger;
+}
