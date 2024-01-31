@@ -28,6 +28,7 @@ export class TimerComponent {
   minutes: any = '0' + 0;
   seconds:  any = '0' + 0;
   running: boolean = false;
+  zeroFlag: boolean = false;
 
 
   recieveForm(form: FormGroup) {
@@ -70,28 +71,39 @@ export class TimerComponent {
   }
 
   start() {
+
+    if(this.minutes > '0' + 1 && this.seconds === '0' + 0){
+      this.zeroFlag = true
+    }
+
     if(!this.running) {
       this.running = true;
       this.timer = setInterval(() => {
-        this.seconds--;
-        this.seconds = this.setZero(this.seconds);
+        if (this.zeroFlag == true) {
+          this.minutes--;
+          this.minutes = this.setZero(this.minutes);
+          this.seconds = 59;
+          this.zeroFlag = false;
+        } else {
+          this.seconds--;
+          this.seconds = this.setZero(this.seconds);
 
-        if (this.seconds === '0' + 0 && this.minutes === '0' + 0 && this.hours === '0' + 0){
-          this.stop();
-        } else if(this.seconds === '0' + 0) {
+          if (this.seconds === '0' + 0 && this.minutes === '0' + 0 && this.hours === '0' + 0){
+            this.stop();
+          } else if(this.seconds === '0' + 0 ) {
 
-          if(this.hours === '0' + 1 && this.minutes === '0' + 0 ) {
-            this.hours--;
-            this.hours = this.setZero(this.hours);
-            this.minutes = 59
-            this.seconds = 59
-          } else {
-            this.minutes--;
-            this.minutes = this.setZero(this.minutes);
-            this.seconds = 59;
-          }
-        };
-
+            if(this.hours === '0' + 1 && this.minutes === '0' + 0 ) {
+              this.hours--;
+              this.hours = this.setZero(this.hours);
+              this.minutes = 59
+              this.seconds = 59
+            } else {
+              this.minutes--;
+              this.minutes = this.setZero(this.minutes);
+              this.seconds = 59;
+            }
+          };
+        }
 
       }, 1000);
     }
