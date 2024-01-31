@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { SettingsComponent } from '../settings/settings.component';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { time } from 'console';
 
 @Component({
   selector: 'app-timer',
@@ -22,15 +21,15 @@ export class TimerComponent {
   numberOfCycles: number = 0;
   cooldownIntervalMin: number = 0;
   cooldownIntervalSec: number = 0;
-  timer: number = 0;
+  timer: any = 0;
   doneSets: number = 0;
   doneCycles: number = 0;
-  hours: number = 0;
-  minutes: number = 0;
-  seconds:  number = 0;
-  clock: string = '00:00:00';
+  hours: any = '0' + 0;
+  minutes: any = '0' + 0;
+  seconds:  any = '0' + 0;
+  running: boolean = false;
 
-  /* Recieve the Settings Form */
+
   recieveForm(form: FormGroup) {
     console.log('Output works!\nSets: ',form.value.numberOfSets)
     this.warmupIntervalMin = form.value.warmupIntervalMin;
@@ -58,11 +57,48 @@ export class TimerComponent {
     this.hours = Math.floor(this.timer / 3600);
     this.minutes = Math.floor((this.timer % 3600) / 60);
     this.seconds = this.timer % 60;
-    this.setClock();
+    this.hours = this.setZero(this.hours)
+    this.minutes = this.setZero(this.minutes)
+    this.seconds = this.setZero(this.seconds)
   }
 
-  setClock() {
-    this.clock = `${this.hours.toString().padStart(2, '0')}:${this.minutes.toString().padStart(2, '0')}:${this.seconds.toString().padStart(2, '0')}`;
+  setZero(x: any) {
+    if (x < 10) {
+      return '0' + x;
+    }
+    return x;
+  }
+
+  start() {
+    if(!this.running) {
+      this.running = true;
+      this.timer = setInterval(() => {
+        this.seconds--;
+        this.seconds = this.setZero(this.seconds);
+
+        if (this.seconds === '0' + 0 && this.minutes === '0' + 0 && this.hours === '0' + 0){
+          this.stop();
+        } else if(this.seconds === '0' + 0) {
+
+          if(this.hours === '0' + 1 && this.minutes === '0' + 0 ) {
+            this.hours--;
+            this.hours = this.setZero(this.hours);
+            this.minutes = 59
+            this.seconds = 59
+          } else {
+            this.minutes--;
+            this.minutes = this.setZero(this.minutes);
+            this.seconds = 59;
+          }
+        };
+
+
+      }, 1000);
+    }
+  }
+
+  stop() {
+    clearInterval(this.timer)
   }
 
 }
