@@ -11,6 +11,7 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 })
 export class TimerComponent {
 
+  /* Settings Form Variables */
   warmupIntervalMin: number = 0;
   warmupIntervalSec: number = 0;
   exerciseIntervalMin: number = 0;
@@ -21,15 +22,25 @@ export class TimerComponent {
   numberOfCycles: number = 0;
   cooldownIntervalMin: number = 0;
   cooldownIntervalSec: number = 0;
-  timer: any = 0;
+
+  /* Variables */
+  warmUpTime: number = 0;
+  coolDownTime: number = 0;
+  exerciseTime: number = 0;
+  restTime: number = 0;
+  totalExerciseTime: number = 0;
+  totalRestTime: number = 0;
+  
   doneSets: number = 0;
   doneCycles: number = 0;
+  timer: any = 0;
+  auxTimer: any = 0;
   hours: any = '0' + 0;
   minutes: any = '0' + 0;
   seconds:  any = '0' + 0;
   running: boolean = false;
   zeroFlag: boolean = false;
-
+  status: string = 'TIMER'
 
   recieveForm(form: FormGroup) {
     console.log('Output works!\nSets: ',form.value.numberOfSets)
@@ -53,6 +64,7 @@ export class TimerComponent {
     this.timer *= this.numberOfCycles;
     this.timer += 60 * (this.warmupIntervalMin + this.cooldownIntervalMin);
     this.timer += this.warmupIntervalSec + this.cooldownIntervalSec;
+    this.auxTimer = this.timer
     console.log('Seconds: ', this.timer)
 
     this.hours = Math.floor(this.timer / 3600);
@@ -61,6 +73,16 @@ export class TimerComponent {
     this.hours = this.setZero(this.hours)
     this.minutes = this.setZero(this.minutes)
     this.seconds = this.setZero(this.seconds)
+    this.caculateTimes();
+  }
+
+  caculateTimes() {
+    this.warmUpTime = this.warmupIntervalSec +(this.warmupIntervalMin * 60);
+    this.coolDownTime = this.cooldownIntervalSec + (this.cooldownIntervalMin * 60);
+    this.exerciseTime = this.exerciseIntervalSec + (this.exerciseIntervalMin * 60);
+    this.restTime = this.restIntervalSec + (this.restIntervalMin * 60);
+    this.totalExerciseTime = this.exerciseTime * this.numberOfCycles * this.numberOfSets
+    this.totalRestTime = this.restTime * this.numberOfCycles * this.numberOfSets
   }
 
   setZero(x: any) {
@@ -72,6 +94,8 @@ export class TimerComponent {
 
   start() {
 
+    this.status = 'EXERCISE'
+
     if(this.minutes > '0' + 1 && this.seconds === '0' + 0){
       this.zeroFlag = true
     }
@@ -79,6 +103,7 @@ export class TimerComponent {
     if(!this.running) {
       this.running = true;
       this.timer = setInterval(() => {
+
         if (this.zeroFlag == true) {
           this.minutes--;
           this.minutes = this.setZero(this.minutes);
@@ -104,12 +129,13 @@ export class TimerComponent {
             }
           };
         }
-
       }, 1000);
     }
   }
 
   stop() {
+    this.running = false;
+    this.status = 'STOPPED'
     clearInterval(this.timer)
   }
 
