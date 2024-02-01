@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { SettingsComponent } from '../settings/settings.component';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { TimerService } from './services/timer.service';
 
 @Component({
   selector: 'app-timer',
@@ -10,6 +11,8 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
   styleUrl: './timer.component.css'
 })
 export class TimerComponent {
+
+  constructor(private timerService: TimerService) {}
 
   /* Settings Form Variables */
   warmupIntervalMin: number = 0;
@@ -24,13 +27,14 @@ export class TimerComponent {
   cooldownIntervalSec: number = 0;
 
   /* Variables */
+  workoutTime: any;
   warmUpTime: number = 0;
   coolDownTime: number = 0;
   exerciseTime: number = 0;
   restTime: number = 0;
   totalExerciseTime: number = 0;
   totalRestTime: number = 0;
-  
+
   doneSets: number = 0;
   doneCycles: number = 0;
   timer: any = 0;
@@ -41,6 +45,7 @@ export class TimerComponent {
   running: boolean = false;
   zeroFlag: boolean = false;
   status: string = 'TIMER'
+
 
   recieveForm(form: FormGroup) {
     console.log('Output works!\nSets: ',form.value.numberOfSets)
@@ -54,26 +59,22 @@ export class TimerComponent {
     this.numberOfCycles = form.value.numberOfCycles;
     this.cooldownIntervalMin = form.value.cooldownIntervalMin;
     this.cooldownIntervalSec = form.value.cooldownIntervalSec;
-    this.calculateTotalWorkoutTime();
-  }
-
-  calculateTotalWorkoutTime() {
-    this.timer = 60 * (this.exerciseIntervalMin + this.restIntervalMin);
-    this.timer += (this.exerciseIntervalSec + this.restIntervalSec);
-    this.timer *= this.numberOfSets;
-    this.timer *= this.numberOfCycles;
-    this.timer += 60 * (this.warmupIntervalMin + this.cooldownIntervalMin);
-    this.timer += this.warmupIntervalSec + this.cooldownIntervalSec;
-    this.auxTimer = this.timer
-    console.log('Seconds: ', this.timer)
-
-    this.hours = Math.floor(this.timer / 3600);
-    this.minutes = Math.floor((this.timer % 3600) / 60);
-    this.seconds = this.timer % 60;
-    this.hours = this.setZero(this.hours)
-    this.minutes = this.setZero(this.minutes)
-    this.seconds = this.setZero(this.seconds)
-    this.caculateTimes();
+    this.workoutTime = this.timerService.calculateTotalWorkoutTime(
+      this.exerciseIntervalMin,
+      this.exerciseIntervalSec,
+      this.restIntervalMin,
+      this.restIntervalSec,
+      this.numberOfSets,
+      this.numberOfCycles,
+      this.warmupIntervalMin,
+      this.warmupIntervalSec,
+      this.cooldownIntervalMin,
+      this.cooldownIntervalSec,
+    );
+    this.hours = this.workoutTime.hours;
+    this.minutes = this.workoutTime.minutes;
+    this.seconds = this.workoutTime.seconds;
+    this.timer = this.workoutTime.timer;
   }
 
   caculateTimes() {
@@ -85,54 +86,103 @@ export class TimerComponent {
     this.totalRestTime = this.restTime * this.numberOfCycles * this.numberOfSets
   }
 
-  setZero(x: any) {
-    if (x < 10) {
-      return '0' + x;
-    }
-    return x;
-  }
+  /* **********************************************************
+   * ************ FUNCTIONS TO HANDLED THE TIMER **************
+   * **********************************************************
+   */
 
-  start() {
+  /*
+   * Starts the timer.
+   */
+  start(): void {
+    this.status = 'EXERCISE';
 
-    this.status = 'EXERCISE'
+    this.exactZeros();
 
-    if(this.minutes > '0' + 1 && this.seconds === '0' + 0){
-      this.zeroFlag = true
-    }
-
-    if(!this.running) {
+    if (!this.running) {
       this.running = true;
-      this.timer = setInterval(() => {
-
-        if (this.zeroFlag == true) {
-          this.minutes--;
-          this.minutes = this.setZero(this.minutes);
-          this.seconds = 59;
-          this.zeroFlag = false;
-        } else {
-          this.seconds--;
-          this.seconds = this.setZero(this.seconds);
-
-          if (this.seconds === '0' + 0 && this.minutes === '0' + 0 && this.hours === '0' + 0){
-            this.stop();
-          } else if(this.seconds === '0' + 0 ) {
-
-            if(this.hours === '0' + 1 && this.minutes === '0' + 0 ) {
-              this.hours--;
-              this.hours = this.setZero(this.hours);
-              this.minutes = 59
-              this.seconds = 59
-            } else {
-              this.minutes--;
-              this.minutes = this.setZero(this.minutes);
-              this.seconds = 59;
-            }
-          };
-        }
-      }, 1000);
+      this.timer = setInterval(() => this.updateTimer(), 1000);
     }
   }
 
+  /**
+   * Updates the timer logic based on the current time values.
+   */
+  updateTimer(): void {
+    if (this.zeroFlag) {
+      this.decrementMinute();
+      this.seconds = 59;
+      this.zeroFlag = false;
+    } else {
+      this.decrementSecond();
+
+      if (this.isTimeUp()) {
+        this.stop();
+      } else if (this.seconds === '0' + 0) {
+        this.handleZeroSeconds();
+      }
+    }
+  }
+
+  /**
+   * Decrements the seconds and formats them with leading zeros.
+   */
+  decrementSecond(): void {
+    this.seconds--;
+    this.seconds = this.timerService.setZero(this.seconds);
+  }
+
+  /**
+   * Decrements the minutes and formats them with leading zeros.
+   */
+  decrementMinute(): void {
+    this.minutes--;
+    this.minutes = this.timerService.setZero(this.minutes);
+  }
+
+  /**
+   * Decrements the hours and formats them with leading zeros.
+   */
+  decrementHour(): void {
+    this.hours--;
+    this.hours = this.timerService.setZero(this.hours);
+  }
+
+  /**
+   * Handles the logic when seconds reach zero.
+   */
+  handleZeroSeconds(): void {
+    if (this.hours === '0' + 1 && this.minutes === '0' + 0) {
+      this.decrementHour();
+      this.minutes = 59;
+      this.seconds = 59;
+    } else {
+      this.decrementMinute();
+      this.seconds = 59;
+    }
+  }
+
+  /*
+   * Handles the logic when it's starting with a exact minute.
+   */
+  exactZeros(): void {
+    if (this.minutes > '0' + 1 && this.seconds === '0' + 0) {
+      this.zeroFlag = true;
+    }
+  }
+
+  /**
+   * Checks if the timer has reached zero for all time components.
+   * @returns {boolean} - True if the timer is up, otherwise false.
+   */
+  isTimeUp(): boolean {
+    return this.seconds === '0' + 0 && this.minutes === '0' + 0 && this.hours === '0' + 0;
+  }
+
+  /*
+   * Stops the timer when the stop button is clicked or when
+   * the times has reached zero.
+   */
   stop() {
     this.running = false;
     this.status = 'STOPPED'
