@@ -1,10 +1,10 @@
 <div class="container">
 
   <div class="timer-container">
-    <h1>{{ status }}</h1>
+    <h1 class="{{ statusColor }}" >{{ status }}</h1>
     <div class="timer">
       <!-- {{ clock }} -->
-      {{ hours }}:{{ minutes }}:{{ seconds }}
+      <div class="{{ statusColor }}">{{ hours }}:{{ minutes }}:{{ seconds }}</div>
     </div>
     <div class="info">
       <h2>Cycles: {{ doneCycles }} / {{ numberOfCycles }}</h2>

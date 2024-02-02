@@ -39,6 +39,7 @@ export class TimerComponent {
   totalRestTime: number = 0;
   flagInterval: any = true;
   flagStart: boolean = false;
+  statusColor = '';
 
   doneSets: number = 0;
   doneCycles: number = 0;
@@ -198,11 +199,10 @@ export class TimerComponent {
    * the times has reached zero.
    */
   stop() {
-    console.log('warmuptime: stop',this.warmUpTime)
     this.running = false;
-    this.status = 'STOPPED'
-    clearInterval(this.timer)
-    console.log('warmuptime: stop',this.warmUpTime)
+    this.status = 'STOPPED';
+    this.statusColor = 'red';
+    clearInterval(this.timer);
   }
 
   /* **********************************************************
@@ -217,8 +217,8 @@ export class TimerComponent {
   warmupInterval(): void {
     if (this.warmUpTime > 0) {
       this.status = 'WARMUP';
+      this.statusColor = 'blue';
       this.warmUpTime--;
-      console.log('WarmupTime: ', this.warmUpTime);
     } else if (this.flagInterval == true) {
       this.exerciseInterval();
     } else if (this.flagInterval == false) {
@@ -234,6 +234,7 @@ export class TimerComponent {
    */
   cooldownInterval(): void {
     this.status = 'COOLDOWN';
+    this.statusColor = 'gray';
     this.coolDownTime--;
     if (this.coolDownTime == 0) {
       this.status = 'FINISHED';
@@ -247,9 +248,9 @@ export class TimerComponent {
    */
   exerciseInterval(): void {
     this.status = 'EXERCISE';
+    this.statusColor = 'green';
     this.totalExerciseTime--;
     this.auxExerciseTime--;
-    console.log('Aux Exercise Time: ',this.auxExerciseTime);
     if (this.auxExerciseTime == 0) {
       this.endExerciseInterval();
     }
@@ -270,6 +271,7 @@ export class TimerComponent {
    */
   restInterval(): void {
     this.status = 'REST';
+    this.statusColor = 'red';
     this.totalRestTime--;
     this.auxRestTime--;
     if (this.auxRestTime == 0) {

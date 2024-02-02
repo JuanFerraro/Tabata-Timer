@@ -15,6 +15,22 @@
   flex-direction: column;
 }
 
+.blue {
+  color: rgb(65, 65, 255);
+}
+.green {
+  color: #48ea27;
+}
+.red {
+  color: red;
+}
+.black {
+  color: black;
+}
+.gray {
+  color: rgb(116, 116, 116);
+}
+
 h1 {
   margin: 0;
   padding: 0;

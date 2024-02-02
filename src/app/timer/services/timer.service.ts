@@ -7,6 +7,7 @@ export class TimerService {
 
   constructor() { }
 
+
   setZero(x: any) {
     if (x < 10) {
       return '0' + x;
@@ -47,5 +48,7 @@ export class TimerService {
     }
     return false;
   }
+
+
 
 }
