@@ -38,6 +38,7 @@ export class TimerComponent {
   totalExerciseTime: number = 0;
   totalRestTime: number = 0;
   flagInterval: any = true;
+  flagStart: boolean = false;
 
   doneSets: number = 0;
   doneCycles: number = 0;
@@ -82,6 +83,7 @@ export class TimerComponent {
     this.minutes = this.workoutTime.minutes;
     this.seconds = this.workoutTime.seconds;
     this.timer = this.workoutTime.timer;
+    this.flagStart = this.timerService.validWorkoutTime(this.workoutTime.timer);
   }
 
 
@@ -309,7 +311,5 @@ export class TimerComponent {
       this.status = 'FINISHED';
     }
   }
-
-
 
 }

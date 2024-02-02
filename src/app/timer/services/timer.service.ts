@@ -41,5 +41,12 @@ export class TimerService {
     return { hours: this.setZero(hours), minutes: this.setZero(minutes), seconds: this.setZero(seconds), timer };
   }
 
+  validWorkoutTime(x: number): boolean {
+    if(x > 0) {
+      return true;
+    }else{
+      return false;
+    }
+  }
 
 }

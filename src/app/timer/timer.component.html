@@ -12,8 +12,10 @@
     </div>
 
     <div class="buttons">
-      <button class="start-button" (click)="start()" >Start</button>
-      <button class="stop-button" (click)="stop()" >Stop</button>
+      @if (flagStart) {
+        <button class="start-button" (click)="start()" >Start</button>
+        <button class="stop-button" (click)="stop()" >Stop</button>
+      }
     </div>
 
   </div>
