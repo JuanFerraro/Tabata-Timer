@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-settings',
@@ -13,17 +13,17 @@ export class SettingsComponent {
   @Output() sendFormEvent = new EventEmitter<FormGroup>();
 
   settingsForm = new FormGroup({
-    warmupIntervalMin: new FormControl (0),
-    warmupIntervalSec: new FormControl (0),
-    exerciseIntervalMin: new FormControl (0),
-    exerciseIntervalSec: new FormControl (0),
-    restIntervalMin: new FormControl (0),
-    restIntervalSec: new FormControl (0),
-    numberOfSets: new FormControl (0),
-    numberOfCycles: new FormControl (0),
-    cooldownIntervalMin: new FormControl (0),
-    cooldownIntervalSec: new FormControl (0),
-  })
+    warmupIntervalMin: new FormControl(0, Validators.required),
+    warmupIntervalSec: new FormControl(0, Validators.required),
+    exerciseIntervalMin: new FormControl(0, Validators.required),
+    exerciseIntervalSec: new FormControl(0, Validators.required),
+    restIntervalMin: new FormControl(0, Validators.required),
+    restIntervalSec: new FormControl(0, Validators.required),
+    numberOfSets: new FormControl(1, [Validators.required, Validators.min(1)]),
+    numberOfCycles: new FormControl(1, [Validators.required, Validators.min(1)]),
+    cooldownIntervalMin: new FormControl(0, Validators.required),
+    cooldownIntervalSec: new FormControl(0, Validators.required),
+  });
 
   sendForm() {
     this.sendFormEvent.emit(this.settingsForm)

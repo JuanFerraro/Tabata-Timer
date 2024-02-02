@@ -215,7 +215,6 @@ export class TimerComponent {
    * and transitioning to the appropriate next interval (exercise, rest, cooldown).
    */
   warmupInterval(): void {
-    console.log('warmupInterval()');
     if (this.warmUpTime > 0) {
       this.status = 'WARMUP';
       this.warmUpTime--;
@@ -237,6 +236,7 @@ export class TimerComponent {
     this.coolDownTime--;
     if (this.coolDownTime == 0) {
       this.status = 'FINISHED';
+      this.flagStart = false;
     }
   }
 
@@ -309,6 +309,7 @@ export class TimerComponent {
     }
     if (this.coolDownTime == 0) {
       this.status = 'FINISHED';
+      this.flagStart = false;
     }
   }
 

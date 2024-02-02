@@ -44,9 +44,8 @@ export class TimerService {
   validWorkoutTime(x: number): boolean {
     if(x > 0) {
       return true;
-    }else{
-      return false;
     }
+    return false;
   }
 
 }
