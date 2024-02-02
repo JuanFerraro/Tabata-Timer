@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { SettingsComponent } from '../settings/settings.component';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TimerService } from './services/timer.service';
+import { stat } from 'fs';
 
 @Component({
   selector: 'app-timer',
@@ -31,9 +32,12 @@ export class TimerComponent {
   warmUpTime: number = 0;
   coolDownTime: number = 0;
   exerciseTime: number = 0;
+  auxExerciseTime: number = 0;
   restTime: number = 0;
+  auxRestTime: number = 0;
   totalExerciseTime: number = 0;
   totalRestTime: number = 0;
+  flagInterval: any = true;
 
   doneSets: number = 0;
   doneCycles: number = 0;
@@ -46,7 +50,10 @@ export class TimerComponent {
   zeroFlag: boolean = false;
   status: string = 'TIMER'
 
-
+  /*
+   * Recieve Settings Form and use the timer Service to calculate
+   * the total workout time.
+   */
   recieveForm(form: FormGroup) {
     console.log('Output works!\nSets: ',form.value.numberOfSets)
     this.warmupIntervalMin = form.value.warmupIntervalMin;
@@ -77,11 +84,17 @@ export class TimerComponent {
     this.timer = this.workoutTime.timer;
   }
 
+
+  /*
+   * Calculates the times in seconds to each interval.
+   */
   caculateTimes() {
     this.warmUpTime = this.warmupIntervalSec +(this.warmupIntervalMin * 60);
     this.coolDownTime = this.cooldownIntervalSec + (this.cooldownIntervalMin * 60);
     this.exerciseTime = this.exerciseIntervalSec + (this.exerciseIntervalMin * 60);
+    this.auxExerciseTime = this.exerciseTime;
     this.restTime = this.restIntervalSec + (this.restIntervalMin * 60);
+    this.auxRestTime = this.restTime
     this.totalExerciseTime = this.exerciseTime * this.numberOfCycles * this.numberOfSets
     this.totalRestTime = this.restTime * this.numberOfCycles * this.numberOfSets
   }
@@ -95,8 +108,8 @@ export class TimerComponent {
    * Starts the timer.
    */
   start(): void {
-    this.status = 'EXERCISE';
 
+    this.caculateTimes();
     this.exactZeros();
 
     if (!this.running) {
@@ -122,6 +135,7 @@ export class TimerComponent {
         this.handleZeroSeconds();
       }
     }
+    this.warmupInterval();
   }
 
   /**
@@ -188,5 +202,114 @@ export class TimerComponent {
     this.status = 'STOPPED'
     clearInterval(this.timer)
   }
+
+  /* **********************************************************
+   * *********** FUNCTIONS TO HANDLED THE STATUS **************
+   * **********************************************************
+   */
+
+  /**
+   * Handles the logic for the warm-up interval, decrementing the warm-up time,
+   * and transitioning to the appropriate next interval (exercise, rest, cooldown).
+   */
+  warmupInterval(): void {
+    console.log('warmupInterval()');
+    if (this.warmUpTime > 0) {
+      this.status = 'WARMUP';
+      this.warmUpTime--;
+    } else if (this.flagInterval == true) {
+      this.exerciseInterval();
+    } else if (this.flagInterval == false) {
+      this.restInterval();
+    } else if (this.coolDownTime > 0) {
+      this.cooldownInterval();
+    }
+  }
+
+  /**
+   * Handles the logic for the cooldown interval, decrementing the cooldown time,
+   * and updating the status to 'FINISHED' when cooldown is complete.
+   */
+  cooldownInterval(): void {
+    this.status = 'COOLDOWN';
+    this.coolDownTime--;
+    if (this.coolDownTime == 0) {
+      this.status = 'FINISHED';
+    }
+  }
+
+  /**
+   * Handles the logic for the exercise interval, decrementing the total exercise time,
+   * and triggering the end of the exercise interval when the auxiliary exercise time is zero.
+   */
+  exerciseInterval(): void {
+    this.status = 'EXERCISE';
+    this.totalExerciseTime--;
+    this.auxExerciseTime--;
+    if (this.auxExerciseTime == 0) {
+      this.endExerciseInterval();
+    }
+  }
+
+  /**
+   * Ends the exercise interval by updating the flagInterval and resetting the auxiliary exercise time.
+   */
+  endExerciseInterval(): void {
+    this.flagInterval = false;
+    this.auxExerciseTime = this.exerciseTime;
+    /* this.restInterval(); */
+  }
+
+  /**
+   * Handles the logic for the rest interval, decrementing the total rest time,
+   * and triggering the end of the rest interval when the auxiliary rest time is zero.
+   */
+  restInterval(): void {
+    this.status = 'REST';
+    this.totalRestTime--;
+    this.auxRestTime--;
+    if (this.auxRestTime == 0) {
+      this.endRestInterval();
+    }
+  }
+
+  /**
+   * Ends the rest interval by updating the flagInterval, resetting the auxiliary rest time,
+   * incrementing the number of done sets, and checking if all sets are done.
+   */
+  endRestInterval(): void {
+    this.flagInterval = true;
+    this.auxRestTime = this.restTime;
+    this.doneSets++;
+    this.allSetsDone();
+  }
+
+  /**
+   * Checks if all sets are done and triggers the logic accordingly,
+   * incrementing the number of done cycles when all sets are completed.
+   */
+  allSetsDone(): void {
+    if (this.doneSets == this.numberOfSets) {
+      this.doneSets = 0;
+      this.doneCycles++;
+      this.allCyclesDone();
+    }
+  }
+
+  /**
+   * Checks if all cycles are done and updates the status to 'FINISHED'
+   * when both sets and cycles are completed, or resets sets for the next cycle.
+   */
+  allCyclesDone(): void {
+    if (this.doneCycles == this.numberOfCycles) {
+      this.doneSets = this.numberOfSets;
+      this.flagInterval = null;
+    }
+    if (this.coolDownTime == 0) {
+      this.status = 'FINISHED';
+    }
+  }
+
+
 
 }
