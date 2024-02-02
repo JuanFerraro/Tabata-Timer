@@ -84,6 +84,8 @@ export class TimerComponent {
     this.seconds = this.workoutTime.seconds;
     this.timer = this.workoutTime.timer;
     this.flagStart = this.timerService.validWorkoutTime(this.workoutTime.timer);
+    this.caculateTimes();
+    this.exactZeros();
   }
 
 
@@ -110,10 +112,6 @@ export class TimerComponent {
    * Starts the timer.
    */
   start(): void {
-
-    this.caculateTimes();
-    this.exactZeros();
-
     if (!this.running) {
       this.running = true;
       this.timer = setInterval(() => this.updateTimer(), 1000);
@@ -200,9 +198,11 @@ export class TimerComponent {
    * the times has reached zero.
    */
   stop() {
+    console.log('warmuptime: stop',this.warmUpTime)
     this.running = false;
     this.status = 'STOPPED'
     clearInterval(this.timer)
+    console.log('warmuptime: stop',this.warmUpTime)
   }
 
   /* **********************************************************
@@ -218,6 +218,7 @@ export class TimerComponent {
     if (this.warmUpTime > 0) {
       this.status = 'WARMUP';
       this.warmUpTime--;
+      console.log('WarmupTime: ', this.warmUpTime);
     } else if (this.flagInterval == true) {
       this.exerciseInterval();
     } else if (this.flagInterval == false) {
@@ -248,6 +249,7 @@ export class TimerComponent {
     this.status = 'EXERCISE';
     this.totalExerciseTime--;
     this.auxExerciseTime--;
+    console.log('Aux Exercise Time: ',this.auxExerciseTime);
     if (this.auxExerciseTime == 0) {
       this.endExerciseInterval();
     }
