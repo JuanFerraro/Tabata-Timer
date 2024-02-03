@@ -10,7 +10,20 @@ form {
 }
 
 h1 {
-  margin: 0px 0px 12px 0px
+  margin: 0px 0px 12px 0px;
+}
+
+.minSec {
+  margin: 0;
+  padding: 0;
+  width: 240px;
+  display: flex;
+  justify-content: flex-end;
+  column-gap: 8px;
+}
+
+p {
+  margin: 0px 0px 2px 0px;
 }
 
 .formGroup {
@@ -19,6 +32,24 @@ h1 {
   align-items: baseline;
   margin-bottom: 12px;
   width: 300px;
+  flex-wrap: wrap;
+}
+
+.error {
+  margin: 0;
+  padding: 0;
+  width: 280px;
+  display: flex;
+  justify-content: center;
+}
+
+span {
+  margin: 0;
+  padding: 6px;
+  font-size: smaller;
+  color: white;
+  background-color: #fe3535;
+  border-radius: 6px;
 }
 
 .formGroup label {

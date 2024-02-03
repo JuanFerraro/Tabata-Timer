@@ -5,8 +5,42 @@ import { Injectable } from '@angular/core';
 })
 export class TimerService {
 
-  constructor() { }
+  private audioOne: HTMLAudioElement;
+  private audioTwo: HTMLAudioElement;
+  private audioThree: HTMLAudioElement;
+  private audioExercise: HTMLAudioElement;
+  private audioRest: HTMLAudioElement;
 
+  constructor() {
+    this.audioOne = new Audio();
+    this.audioOne.src = './assets/sounds/robot-saying-1.mp3';
+    this.audioTwo = new Audio();
+    this.audioTwo.src = './assets/sounds/robot-saying-2.mp3';
+    this.audioThree = new Audio();
+    this.audioThree.src = './assets/sounds/robot-saying-3.mp3';
+    this.audioExercise = new Audio();
+    this.audioExercise.src = './assets/sounds/exercise.ogg';
+    this.audioRest = new Audio();
+    this.audioRest.src = './assets/sounds/rest.ogg';
+  }
+
+  reproduceAlertSound(x: number): void {
+    if (x == 1) {
+      this.audioOne.play();
+    } else if (x == 2) {
+      this.audioTwo.play();
+    } else {
+      this.audioThree.play();
+    }
+  }
+
+  reproduceStatusSound(x: boolean): void {
+    if (x == true){
+      this.audioExercise.play();
+    } else {
+      this.audioRest.play();
+    }
+  }
 
   setZero(x: any) {
     if (x < 10) {
@@ -48,7 +82,5 @@ export class TimerService {
     }
     return false;
   }
-
-
 
 }

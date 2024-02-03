@@ -11,6 +11,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 export class SettingsComponent {
 
   @Output() sendFormEvent = new EventEmitter<FormGroup>();
+  reset: boolean = false;
 
   settingsForm = new FormGroup({
     warmupIntervalMin: new FormControl(0, Validators.required),
@@ -26,7 +27,15 @@ export class SettingsComponent {
   });
 
   sendForm() {
+    this.reset = true;
     this.sendFormEvent.emit(this.settingsForm)
+  }
+
+  resetForm() {
+    this.settingsForm.reset();
+    this.settingsForm.markAsPristine();
+    this.settingsForm.markAsUntouched();
+    this.reset = false;
   }
 
 }

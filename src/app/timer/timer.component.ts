@@ -219,6 +219,8 @@ export class TimerComponent {
       this.status = 'WARMUP';
       this.statusColor = 'blue';
       this.warmUpTime--;
+      this.alertSounds(this.warmUpTime);
+      this.statusSounds(this.warmUpTime, true)
     } else if (this.flagInterval == true) {
       this.exerciseInterval();
     } else if (this.flagInterval == false) {
@@ -251,8 +253,10 @@ export class TimerComponent {
     this.statusColor = 'green';
     this.totalExerciseTime--;
     this.auxExerciseTime--;
+    this.alertSounds(this.auxExerciseTime)
     if (this.auxExerciseTime == 0) {
       this.endExerciseInterval();
+      this.timerService.reproduceStatusSound(false);
     }
   }
 
@@ -262,7 +266,6 @@ export class TimerComponent {
   endExerciseInterval(): void {
     this.flagInterval = false;
     this.auxExerciseTime = this.exerciseTime;
-    /* this.restInterval(); */
   }
 
   /**
@@ -274,6 +277,7 @@ export class TimerComponent {
     this.statusColor = 'red';
     this.totalRestTime--;
     this.auxRestTime--;
+    this.alertSounds(this.auxRestTime);
     if (this.auxRestTime == 0) {
       this.endRestInterval();
     }
@@ -310,10 +314,29 @@ export class TimerComponent {
     if (this.doneCycles == this.numberOfCycles) {
       this.doneSets = this.numberOfSets;
       this.flagInterval = null;
+      this.timerService.reproduceStatusSound(false);
+      if (this.coolDownTime == 0) {
+        this.status = 'FINISHED';
+        this.flagStart = false;
+      }
     }
-    if (this.coolDownTime == 0) {
-      this.status = 'FINISHED';
-      this.flagStart = false;
+  }
+
+  /*
+   * Uses the timer Service to reproduce alert sounds
+   */
+  alertSounds(x: number): void {
+    if (x <= 3 && x > 0) {
+      this.timerService.reproduceAlertSound(x);
+    }
+  }
+
+  /*
+   * Uses the timer Service to reproduce alert sounds
+   */
+  statusSounds(x: number, y: boolean): void {
+    if (x == 0) {
+      this.timerService.reproduceStatusSound(y);
     }
   }
 

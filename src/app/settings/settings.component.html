@@ -1,12 +1,22 @@
 <form [formGroup]="settingsForm" (ngSubmit)="sendForm()" >
   <h1>Settings</h1>
-
+  <div class="minSec">
+    <p>Minutes</p>
+    <p>Seconds</p>
+  </div>
   <div class="formGroup">
     <label for="warmupInterval">
       Warmup Interval:
     </label>
     <input type="number" id="warmupInterval"  formControlName="warmupIntervalMin" class="time-input" placeholder="Min" max="90" min="0" required>
     <input type="number" id="warmupIntervalSec" formControlName="warmupIntervalSec" class="time-input" placeholder="Sec" max="59" min="0" required>
+    <div class="error">
+      @if (settingsForm.get('warmupIntervalMin')?.invalid && settingsForm.get('warmupIntervalMin')?.touched
+        || settingsForm.get('warmupIntervalSec')?.invalid && settingsForm.get('warmupIntervalSec')?.touched
+      ) {
+        <span>Warmup interval is required.</span>
+      }
+    </div>
   </div>
 
   <div class="formGroup">
@@ -15,6 +25,13 @@
     </label>
     <input type="number" id="exerciseInterval" formControlName="exerciseIntervalMin" class="time-input" placeholder="Min" max="90" min="0" required>
     <input type="number" id="exerciseIntervalSec" formControlName="exerciseIntervalSec" class="time-input" placeholder="Sec" max="59" min="0" required>
+    <div class="error">
+      @if (settingsForm.get('exerciseIntervalMin')?.invalid && settingsForm.get('exerciseIntervalMin')?.touched
+        || settingsForm.get('exerciseIntervalSec')?.invalid && settingsForm.get('exerciseIntervalSec')?.touched
+      ) {
+        <span>Exercise interval is required.</span>
+      }
+    </div>
   </div>
 
   <div class="formGroup">
@@ -23,6 +40,13 @@
     </label>
     <input type="number" id="restInterval" formControlName="restIntervalMin" class="time-input" placeholder="Min" max="90" min="0" required>
     <input type="number" id="restIntervalSec" formControlName="restIntervalSec" class="time-input" placeholder="Sec" max="59" min="0" required>
+    <div class="error">
+      @if (settingsForm.get('restIntervalMin')?.invalid && settingsForm.get('restIntervalMin')?.touched
+        || settingsForm.get('restIntervalSec')?.invalid && settingsForm.get('restIntervalSec')?.touched
+      ) {
+        <span>Rest interval is required.</span>
+      }
+    </div>
   </div>
 
   <div class="formGroup">
@@ -30,6 +54,11 @@
       Number of Sets:
     </label>
     <input type="number" id="numberOfSets" formControlName="numberOfSets" class="time-input" placeholder="6" max="30" min="1" required>
+    <div class="error">
+      @if (settingsForm.get('numberOfSets')?.invalid && settingsForm.get('numberOfSets')?.touched) {
+        <span>Sets are required.</span>
+      }
+    </div>
   </div>
 
   <div class="formGroup">
@@ -37,6 +66,11 @@
       Number of Cycles:
     </label>
     <input type="number" id="numberOfCycles" formControlName="numberOfCycles" class="time-input" placeholder="3" max="10" min="1" required>
+    <div class="error">
+      @if (settingsForm.get('numberOfCycles')?.invalid && settingsForm.get('numberOfCycles')?.touched) {
+        <span>Cycles are required.</span>
+      }
+    </div>
   </div>
 
   <div class="formGroup">
@@ -45,8 +79,19 @@
     </label>
     <input type="number" id="cooldownInterval" formControlName="cooldownIntervalMin" class="time-input" placeholder="Min" max="90" min="0" required>
     <input type="number" id="cooldownIntervalSec" formControlName="cooldownIntervalSec" class="time-input" placeholder="Sec" max="59" min="0" required>
+    <div class="error">
+      @if (settingsForm.get('cooldownIntervalMin')?.invalid && settingsForm.get('cooldownIntervalMin')?.touched
+        || settingsForm.get('cooldownIntervalSec')?.invalid && settingsForm.get('cooldownIntervalSec')?.touched
+      ) {
+        <span>Cooldown interval is required.</span>
+      }
+    </div>
   </div>
 
-  <button type="submit" [disabled]="!settingsForm.valid">Confirm</button>
+  @if (reset) {
+    <button type="button" (click)="resetForm()">Reset</button>
+  } @else {
+    <button type="submit" [disabled]="!settingsForm.valid">Confirm</button>
+  }
 </form>
 
