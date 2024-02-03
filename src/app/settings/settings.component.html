@@ -91,7 +91,7 @@
   @if (reset) {
     <button type="button" (click)="resetForm()">Reset</button>
   } @else {
-    <button type="submit" [disabled]="!settingsForm.valid">Confirm</button>
+    <button type="submit" [disabled]="!settingsForm.valid" (click)="checkForm()">Confirm</button>
   }
 </form>
 

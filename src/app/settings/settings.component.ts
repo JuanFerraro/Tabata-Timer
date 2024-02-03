@@ -31,6 +31,22 @@ export class SettingsComponent {
     this.sendFormEvent.emit(this.settingsForm)
   }
 
+  checkForm() {
+    if (this.settingsForm.value.exerciseIntervalMin == 0 && this.settingsForm.value.exerciseIntervalSec == 0) {
+        this.settingsForm.patchValue({
+          exerciseIntervalMin: null,
+          exerciseIntervalSec: null,
+        });
+    } else if (this.settingsForm.value.restIntervalMin == 0 && this.settingsForm.value.restIntervalSec == 0) {
+      this.settingsForm.patchValue({
+        restIntervalMin: null,
+        restIntervalSec: null,
+      });
+    } else {
+      this.sendForm()
+    }
+  }
+
   resetForm() {
     this.settingsForm.reset();
     this.settingsForm.markAsPristine();
