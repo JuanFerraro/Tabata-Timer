@@ -87,8 +87,36 @@ export class TimerComponent {
     this.flagStart = this.timerService.validWorkoutTime(this.workoutTime.timer);
     this.caculateTimes();
     this.exactZeros();
+    console.log(`recieve form: ${this.warmupIntervalSec}`)
   }
 
+  resetAll(x: boolean) {
+    if (x) {
+      this.workoutTime;
+      this.warmUpTime = 0;
+      this.coolDownTime = 0;
+      this.exerciseTime = 0;
+      this.auxExerciseTime = 0;
+      this.restTime = 0;
+      this.auxRestTime = 0;
+      this.totalExerciseTime = 0;
+      this.totalRestTime = 0;
+      this.flagInterval = true;
+      this.flagStart = false;
+      this.statusColor = '';
+
+      this.doneSets = 0;
+      this.doneCycles = 0;
+      this.timer = 0;
+      this.auxTimer = 0;
+      this.hours = '0' + 0;
+      this.minutes = '0' + 0;
+      this.seconds = '0' + 0;
+      this.running = false;
+      this.zeroFlag = false;
+      this.status = 'TIMER'
+    }
+  }
 
   /*
    * Calculates the times in seconds to each interval.
@@ -280,6 +308,7 @@ export class TimerComponent {
     this.alertSounds(this.auxRestTime);
     if (this.auxRestTime == 0) {
       this.endRestInterval();
+      this.allExerciseDone();
     }
   }
 
@@ -319,6 +348,12 @@ export class TimerComponent {
         this.status = 'FINISHED';
         this.flagStart = false;
       }
+    }
+  }
+
+  allExerciseDone(): void {
+    if (this.totalExerciseTime != 0){
+      this.timerService.reproduceStatusSound(true)
     }
   }
 

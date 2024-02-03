@@ -11,6 +11,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 export class SettingsComponent {
 
   @Output() sendFormEvent = new EventEmitter<FormGroup>();
+  @Output() resetEvent = new EventEmitter<boolean>();
   reset: boolean = false;
 
   settingsForm = new FormGroup({
@@ -51,6 +52,7 @@ export class SettingsComponent {
     this.settingsForm.reset();
     this.settingsForm.markAsPristine();
     this.settingsForm.markAsUntouched();
+    this.resetEvent.emit(this.reset)
     this.reset = false;
   }
 
