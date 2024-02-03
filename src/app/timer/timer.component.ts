@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { SettingsComponent } from '../settings/settings.component';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TimerService } from './services/timer.service';
-import { stat } from 'fs';
 
 @Component({
   selector: 'app-timer',
@@ -57,7 +56,6 @@ export class TimerComponent {
    * the total workout time.
    */
   recieveForm(form: FormGroup) {
-    console.log('Output works!\nSets: ',form.value.numberOfSets)
     this.warmupIntervalMin = form.value.warmupIntervalMin;
     this.warmupIntervalSec = form.value.warmupIntervalSec;
     this.exerciseIntervalMin = form.value.exerciseIntervalMin;
@@ -87,9 +85,11 @@ export class TimerComponent {
     this.flagStart = this.timerService.validWorkoutTime(this.workoutTime.timer);
     this.caculateTimes();
     this.exactZeros();
-    console.log(`recieve form: ${this.warmupIntervalSec}`)
   }
 
+  /*
+   * Reset all the variables used in the timer.
+   */
   resetAll(x: boolean) {
     if (x) {
       this.workoutTime;
@@ -343,7 +343,7 @@ export class TimerComponent {
     if (this.doneCycles == this.numberOfCycles) {
       this.doneSets = this.numberOfSets;
       this.flagInterval = null;
-      this.timerService.reproduceStatusSound(false);
+      this.timerService.reproduceFinished();
       if (this.coolDownTime == 0) {
         this.status = 'FINISHED';
         this.flagStart = false;

@@ -10,6 +10,7 @@ export class TimerService {
   private audioThree: HTMLAudioElement;
   private audioExercise: HTMLAudioElement;
   private audioRest: HTMLAudioElement;
+  private audioBuzzer: HTMLAudioElement;
 
   constructor() {
     this.audioOne = new Audio();
@@ -22,6 +23,8 @@ export class TimerService {
     this.audioExercise.src = './assets/sounds/exercise.ogg';
     this.audioRest = new Audio();
     this.audioRest.src = './assets/sounds/rest.ogg';
+    this.audioBuzzer = new Audio();
+    this.audioBuzzer.src = './assets/sounds/buzzer.mp3';
   }
 
   reproduceAlertSound(x: number): void {
@@ -40,6 +43,10 @@ export class TimerService {
     } else {
       this.audioRest.play();
     }
+  }
+
+  reproduceFinished(): void {
+    this.audioBuzzer.play();
   }
 
   setZero(x: any) {
