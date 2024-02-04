@@ -26,30 +26,29 @@ export class TimerComponent {
   cooldownIntervalMin: number = 0;
   cooldownIntervalSec: number = 0;
 
-  /* Variables */
-  workoutTime: any;
-  warmUpTime: number = 0;
-  coolDownTime: number = 0;
-  exerciseTime: number = 0;
-  auxExerciseTime: number = 0;
-  restTime: number = 0;
-  auxRestTime: number = 0;
-  totalExerciseTime: number = 0;
-  totalRestTime: number = 0;
-  flagInterval: any = true;
-  flagStart: boolean = false;
-  statusColor = '';
+  /* Variables */                     /* Descriptions: */
+  workoutTime: any;                   /* ->Keep the total workout time, (Hours, Minutes, Secons and Timer[All in seconds]) */
+  warmUpTime: number = 0;             /* ->Total warmup time in seconds*/
+  coolDownTime: number = 0;           /* ->Total cooldown time in seconds */
+  exerciseTime: number = 0;           /* ->Exercise Interval in seconds */
+  auxExerciseTime: number = 0;        /* ->ExerciseTime's auxiliary  */
+  restTime: number = 0;               /* ->Rest interval in seconds */
+  auxRestTime: number = 0;            /* ->restTime's auxiliary */
+  totalExerciseTime: number = 0;      /* ->Total exercise time in seconds */
+  totalRestTime: number = 0;          /* ->Total rest time in seconds */
+  flagInterval: any = true;           /* ->Manage rest and exercise intervals and status */
+  flagStart: boolean = false;         /* ->Validate the correct starting of the timer */
+  statusColor = '';                   /* ->String to use as a CSS class in the timer and status */
 
-  doneSets: number = 0;
-  doneCycles: number = 0;
-  timer: any = 0;
-  auxTimer: any = 0;
-  hours: any = '0' + 0;
-  minutes: any = '0' + 0;
-  seconds:  any = '0' + 0;
+  doneSets: number = 0;               /* ->Number of Sets done */
+  doneCycles: number = 0;             /* ->Number of Cycles done */
+  timer: any = 0;                     /* ->Total time in seconds */
+  hours: any = '0' + 0;               /* ->Shows the hours on screen */
+  minutes: any = '0' + 0;             /* ->Shows the minutes on screen */
+  seconds:  any = '0' + 0;            /* ->Shows the seconds on screen */
   running: boolean = false;
-  zeroFlag: boolean = false;
-  status: string = 'TIMER'
+  zeroFlag: boolean = false;          /* ->Validate if the timer starts at #:00 */
+  status: string = 'TIMER'            /* Shows status on screen */
 
   /*
    * Recieve Settings Form and use the timer Service to calculate
@@ -108,7 +107,6 @@ export class TimerComponent {
       this.doneSets = 0;
       this.doneCycles = 0;
       this.timer = 0;
-      this.auxTimer = 0;
       this.hours = '0' + 0;
       this.minutes = '0' + 0;
       this.seconds = '0' + 0;

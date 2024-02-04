@@ -5,6 +5,9 @@ import { Injectable } from '@angular/core';
 })
 export class TimerService {
 
+  /*
+   * Audio elements for different sounds
+   */
   private audioOne: HTMLAudioElement;
   private audioTwo: HTMLAudioElement;
   private audioThree: HTMLAudioElement;
@@ -12,6 +15,9 @@ export class TimerService {
   private audioRest: HTMLAudioElement;
   private audioBuzzer: HTMLAudioElement;
 
+  /*
+   * Initializing audio elements with corresponding sound files
+   */
   constructor() {
     this.audioOne = new Audio();
     this.audioOne.src = './assets/sounds/robot-saying-1.mp3';
@@ -27,6 +33,9 @@ export class TimerService {
     this.audioBuzzer.src = './assets/sounds/buzzer.mp3';
   }
 
+  /*
+   * Function to play different alert sounds based on a counter
+   */
   reproduceAlertSound(x: number): void {
     if (x == 1) {
       this.audioOne.play();
@@ -37,6 +46,9 @@ export class TimerService {
     }
   }
 
+  /*
+   * Function to play exercise or rest sound based on a boolean status
+   */
   reproduceStatusSound(x: boolean): void {
     if (x == true){
       this.audioExercise.play();
@@ -45,10 +57,16 @@ export class TimerService {
     }
   }
 
+  /*
+   * Function to play finished buzzer sound
+   */
   reproduceFinished(): void {
     this.audioBuzzer.play();
   }
 
+  /*
+   * Helper function to add leading zero for single-digit numbers
+   */
   setZero(x: any) {
     if (x < 10) {
       return '0' + x;
@@ -56,6 +74,10 @@ export class TimerService {
     return x;
   }
 
+
+  /*
+   * Function to calculate total workout time in hours, minutes, and seconds
+   */
   calculateTotalWorkoutTime(
     exerciseIntervalMin: number,
     exerciseIntervalSec: number,
@@ -83,6 +105,9 @@ export class TimerService {
     return { hours: this.setZero(hours), minutes: this.setZero(minutes), seconds: this.setZero(seconds), timer };
   }
 
+  /*
+   * Function to check if the workout time is valid (greater than 0)
+   */
   validWorkoutTime(x: number): boolean {
     if(x > 0) {
       return true;
