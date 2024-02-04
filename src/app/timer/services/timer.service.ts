@@ -14,6 +14,8 @@ export class TimerService {
   private audioExercise: HTMLAudioElement;
   private audioRest: HTMLAudioElement;
   private audioBuzzer: HTMLAudioElement;
+  private audioWarmup: HTMLAudioElement;
+  private audioCooldown: HTMLAudioElement;
 
   /*
    * Initializing audio elements with corresponding sound files
@@ -26,11 +28,15 @@ export class TimerService {
     this.audioThree = new Audio();
     this.audioThree.src = './assets/sounds/robot-saying-3.mp3';
     this.audioExercise = new Audio();
-    this.audioExercise.src = './assets/sounds/exercise.ogg';
+    this.audioExercise.src = './assets/sounds/exercise.mp3';
     this.audioRest = new Audio();
-    this.audioRest.src = './assets/sounds/rest.ogg';
+    this.audioRest.src = './assets/sounds/rest.mp3';
     this.audioBuzzer = new Audio();
     this.audioBuzzer.src = './assets/sounds/buzzer.mp3';
+    this.audioWarmup = new Audio();
+    this.audioWarmup.src = './assets/sounds/warmup.mp3';
+    this.audioCooldown = new Audio();
+    this.audioCooldown.src = './assets/sounds/cooldown.mp3';
   }
 
   /*
@@ -54,6 +60,14 @@ export class TimerService {
       this.audioExercise.play();
     } else {
       this.audioRest.play();
+    }
+  }
+
+  reproduceWarmCoolSound(x: boolean): void {
+    if (x == true) {
+      this.audioWarmup.play();
+    } else {
+      this.audioCooldown.play();
     }
   }
 

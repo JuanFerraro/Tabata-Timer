@@ -29,7 +29,9 @@ export class TimerComponent {
   /* Variables */                     /* Descriptions: */
   workoutTime: any;                   /* ->Keep the total workout time, (Hours, Minutes, Secons and Timer[All in seconds]) */
   warmUpTime: number = 0;             /* ->Total warmup time in seconds*/
+  auxWarmUpTime: number = 0;          /* ->wamrUpTime's auxiliary*/
   coolDownTime: number = 0;           /* ->Total cooldown time in seconds */
+  auxCoolDownTime: number = 0;        /* ->coolDownTime's auxiliary */
   exerciseTime: number = 0;           /* ->Exercise Interval in seconds */
   auxExerciseTime: number = 0;        /* ->ExerciseTime's auxiliary  */
   restTime: number = 0;               /* ->Rest interval in seconds */
@@ -91,6 +93,7 @@ export class TimerComponent {
    */
   resetAll(x: boolean) {
     if (x) {
+      clearInterval(this.timer);
       this.workoutTime;
       this.warmUpTime = 0;
       this.coolDownTime = 0;
@@ -121,7 +124,9 @@ export class TimerComponent {
    */
   caculateTimes() {
     this.warmUpTime = this.warmupIntervalSec +(this.warmupIntervalMin * 60);
+    this.auxWarmUpTime = this.warmUpTime;
     this.coolDownTime = this.cooldownIntervalSec + (this.cooldownIntervalMin * 60);
+    this.auxCoolDownTime = this.coolDownTime;
     this.exerciseTime = this.exerciseIntervalSec + (this.exerciseIntervalMin * 60);
     this.auxExerciseTime = this.exerciseTime;
     this.restTime = this.restIntervalSec + (this.restIntervalMin * 60);
@@ -244,6 +249,9 @@ export class TimerComponent {
     if (this.warmUpTime > 0) {
       this.status = 'WARMUP';
       this.statusColor = 'blue';
+      if (this.warmUpTime == this.auxWarmUpTime) {
+        this.timerService.reproduceWarmCoolSound(true);
+      }
       this.warmUpTime--;
       this.alertSounds(this.warmUpTime);
       this.statusSounds(this.warmUpTime, true)
@@ -263,10 +271,14 @@ export class TimerComponent {
   cooldownInterval(): void {
     this.status = 'COOLDOWN';
     this.statusColor = 'gray';
+    if(this.coolDownTime == this.auxCoolDownTime){
+      this.timerService.reproduceWarmCoolSound(false);
+    }
     this.coolDownTime--;
     if (this.coolDownTime == 0) {
       this.status = 'FINISHED';
       this.flagStart = false;
+      this.timerService.reproduceFinished();
     }
   }
 
