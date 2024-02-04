@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Familjen+Grotesk&display=swap');
+*{
+  font-family: 'Familjen Grotesk', sans-serif;
+}
+
+h1 {
+  margin: 8px;
+  font-size: 50px;
+}
+
+p {
+  font-size: 20px;
+}
+
+.contactChild {
+  margin: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
