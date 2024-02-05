@@ -78,3 +78,12 @@ button {
 button:hover {
   background-color: #d70202;
 }
+
+@media (max-width: 850px) {
+  .form {
+    margin: 0;
+    padding: 0;
+    max-width: 300px;
+    margin-bottom: 12px;
+  }
+}
