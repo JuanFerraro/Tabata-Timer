@@ -85,3 +85,19 @@ h2 {
 .start-button:hover {
   background-color: #178f0a;
 }
+
+@media (max-width: 850px) {
+  .container {
+    flex-direction: column;
+    width: 100%;
+    margin: 0;
+  }
+
+  .timer {
+    font-size: 60px;
+  }
+
+  h2 {
+    font-size: large;
+  }
+}

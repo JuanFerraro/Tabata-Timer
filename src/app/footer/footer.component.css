@@ -31,3 +31,19 @@
 .footer a:hover {
   text-decoration: underline;
 }
+
+@media (max-width: 850px) {
+  .footer-left img {
+    width: 50;
+    height: 30;
+  }
+
+  .footer-center {
+    font-size: smaller;
+  }
+
+  .footer-right {
+    display: flex;
+    flex-direction: column;
+  }
+}
